@@ -20,7 +20,7 @@ source_dir = Path(os.path.dirname(os.path.abspath(__file__)))
 
 @dataclass
 class MkConfig:
-    MapsDir : str = f"{source_dir}/firsttry"
+    MapsDir : str = f"{source_dir}/maps"
     MapHeightInTiles: int = 20
     MapWidthInTiles: int = 20
     IsRender: bool = True
