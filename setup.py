@@ -24,8 +24,9 @@ setup(name='meta_monsterkong',
     packages = packages,
     include_package_data = True,
     package_data = {
-        # If any package contains *.txt or *.rst files, include them:
-        # And include any *.msg files found in the "hello" package, too:
-        "meta_monsterkong": ["assets/*", "firsttry/*", "maps20x20/*", "maps20x20_test/*"],
+        # Include all the assets and maps.
+        # IDEA: Could be cool to generate the maps after install, rather than bundling
+        # them together with the package.
+        "meta_monsterkong": ["assets/*", "maps/*"],
     }
 )
