@@ -10,6 +10,15 @@ def load_requirements(requirements_path = "requirements.txt") -> List[str]:
     with open(requirements_path, "r") as file:
         lines = [ln.strip() for ln in file.readlines()]
         lines = [line for line in lines if not line.startswith("#")]
+        lines = [line for line in lines if "git+" not in line]
+    return lines
+
+
+def load_github_requirements(requirements_path = "requirements.txt") -> List[str]:
+    with open(requirements_path, "r") as file:
+        lines = [ln.strip() for ln in file.readlines()]
+        lines = [line for line in lines if not line.startswith("#")]
+        lines = [line for line in lines if "https://" in line]
     return lines
 
 
@@ -17,6 +26,7 @@ setup(name='meta_monsterkong',
     version='0.0.1',
     description="meta_monsterkong: samples a new map uniformly at random from a directory of generated maps",
     install_requires=load_requirements(requirements_path),
+    dependency_links=load_github_requirements(requirements_path),
     packages = packages,
     include_package_data = True,
     package_data = {
