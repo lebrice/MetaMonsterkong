@@ -1,26 +1,22 @@
 from setuptools import setup, find_packages
 packages = find_packages()
+import os
+from typing import List
+
+requirements_path = os.path.join(os.path.dirname(__file__), "requirements.txt")
+
+
+def load_requirements(requirements_path = "requirements.txt") -> List[str]:
+    with open(requirements_path, "r") as file:
+        lines = [ln.strip() for ln in file.readlines()]
+        lines = [line for line in lines if not line.startswith("#")]
+    return lines
+
 
 setup(name='meta_monsterkong',
-	version='0.0.1',
+    version='0.0.1',
     description="meta_monsterkong: samples a new map uniformly at random from a directory of generated maps",
-	install_requires=[
-     'gym',
-     'pygame',
-    # NOTE: Adding these repos as requirements, and if modifications were made (for
-    # instance with gym-ple, it seems like we're using an older version of their repo)
-    # then we add a fork of that repo as a dependency.
-     "opencv-python",
-     "matplotlib",
-     'gym_ple @ git+https://github.com/lebrice/gym-ple.git#egg=gym_ple',
-     'ple @ git+https://github.com/ntasfi/PyGame-Learning-Environment.git#egg=ple',
-    # I don't think this is really necessary if we just want to create the environment:
-    # The only reason that I can see is the option of vectoring those environments,
-    # which has since been added directly to gym as `gym.vector`. 
-    # However if want to retain the ability to render these vectorized envs, then we'd
-    # need to use a fork of gym that adds it.
-    #  'baselines @ git+https://github.com/openai/baselines.git',
-    ],
+    install_requires=load_requirements(requirements_path),
     packages = packages,
     include_package_data = True,
     package_data = {
@@ -28,5 +24,6 @@ setup(name='meta_monsterkong',
         # IDEA: Could be cool to generate the maps after install, rather than bundling
         # them together with the package.
         "meta_monsterkong": ["assets/*", "maps/*"],
-    }
+    },
+    python_requires=">=3.6",
 )
