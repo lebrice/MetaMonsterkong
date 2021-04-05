@@ -23,7 +23,7 @@ def load_github_requirements(requirements_path = "requirements.txt") -> List[str
 
 
 setup(name='meta_monsterkong',
-    version='0.0.1',
+    version='0.0.1.post1',
     description="meta_monsterkong: samples a new map uniformly at random from a directory of generated maps",
     install_requires=load_requirements(requirements_path),
     dependency_links=load_github_requirements(requirements_path),
