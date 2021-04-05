@@ -10,7 +10,7 @@ def load_requirements(requirements_path = "requirements.txt") -> List[str]:
     with open(requirements_path, "r") as file:
         lines = [ln.strip() for ln in file.readlines()]
         lines = [line for line in lines if not line.startswith("#")]
-        lines = [line for line in lines if "git+" not in line]
+        # lines = [line for line in lines if "git+" not in line]
     return lines
 
 
