@@ -29,8 +29,6 @@ class MkConfig:
     RewardsWin: float = 50.0
     StartLevel: int = 0
     NumLevels: int = 1
-    TextureFixed: bool = True  # False
-    Mode: str = "Test"
     
     def __getitem__(self, key: str):
         return getattr(self, key)
@@ -307,6 +305,7 @@ class meta_monsterkong(MonsterKong_Base):
     def __init__(self, mk_config):
         super().__init__(mk_config=mk_config)
         self._level: Optional[int] = None
+        self._color: Optional[int] = None
         end_level = self.mk_config.StartLevel + self.mk_config.NumLevels
         # print(f"Creating a new meta_monsterkong wrapper for levels: "
         #       f"[{self.mk_config.StartLevel}:{end_level})")
@@ -315,7 +314,6 @@ class meta_monsterkong(MonsterKong_Base):
         # Create a new instance of the Board class
         # self.playerPosition = (120, 180) #change here depending on game width and height. for map_short it was (120,150), for short2 it was (120,230), for 3 (50,100)
         # self.playerPosition = (120, 210)
-        self.texture_fixed = self.mk_config.TextureFixed
         if self._level is not None:
             # If a level was manually fixed using the `level` property
             level = self._level
@@ -338,18 +336,35 @@ class meta_monsterkong(MonsterKong_Base):
         self.wallGroup = self.currentBoard.wallGroup
         self.ladderGroup = self.currentBoard.ladderGroup
 
-        if self.mk_config.Mode == 'Test':
-            level += 10000
 
-        if not self.texture_fixed:
-            rng = np.random.default_rng(seed=level)
+        if self._color is not None:
+            #rng = np.random.default_rng(seed=level)
             self.size = (3,3)
-            self.kernel = [rng.random(self.size).flatten() for _ in range(3)]
-            self.offset = [128*rng.random() for _ in range(3)]
+            #self.kernel = [np.random.random(self.size).flatten() for _ in range(3)]
+            self.kernel = [np.ones(self.size).flatten() for _ in range(3)]
+            self.offset = [128*np.random.random() for _ in range(3)]
+            if self._color == 'RG':
+                self.offset[2] = 0.0
+            elif self._color == 'RB':
+                self.offset[1] = 0.0
+            elif self._color == 'GB':
+                self.offset[0] = 0.0
+            elif self._color == 'R':
+                self.offset[1] = 0.0
+                self.offset[2] = 0.0
+            elif self._color == 'G':
+                self.offset[0] = 0.0
+                self.offset[2] = 0.0
+            elif self._color == 'B':
+                self.offset[0] = 0.0
+                self.offset[1] = 0.0
+                 
+            #print("kernel=",self.kernel)
+            #print("offset=",self.offset)
 
     def getScreenRGB(self):
         img = pygame.surfarray.array3d(pygame.display.get_surface()).astype(np.uint8)        
-        if not self.texture_fixed:
+        if self._color is not None:
             red, green, blue = (Image.fromarray(img)).split()
             n_c_channels = []
             for (i, c_channel) in enumerate([red, green, blue]):                    

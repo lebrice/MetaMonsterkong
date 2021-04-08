@@ -18,20 +18,22 @@ class RandomAgent(object):
         return np.array([self.action_space.sample() for _ in range(self.num_envs)])
 
 if __name__ == '__main__':
+    level = int(sys.argv[1])
+    level_range = int(sys.argv[2])
     
     mk_config = {
-        'MapsDir':'./meta_monsterkong/firsttry',
+        'MapsDir':'./meta_monsterkong/maps',
         'MapHeightInTiles': 20,
         'MapWidthInTiles': 20,
         'IsRender':True,
         'SingleID': None,
         'DenseRewardCoeff':0.0,
         'RewardsWin':50.0,
-        'StartLevel':10,
-        'NumLevels':10,   
+        'StartLevel':level,
+        'NumLevels': level_range,   
     }
 
-    num_envs = 12
+    num_envs = 1
     envs = meta_monsterkong.make_vec_random_env(num_envs=num_envs, mk_config=mk_config)
     agent = RandomAgent(envs.action_space, num_envs)
 

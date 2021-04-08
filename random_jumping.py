@@ -28,9 +28,7 @@ if __name__ == '__main__':
         'DenseRewardCoeff':0.0,
         'RewardsWin':50.0,
         'StartLevel':0,
-        'NumLevels':10,
-        'TextureFixed': False,#False,
-        'Mode': 'Train',    
+        'NumLevels':10,   
     }
 
     num_envs = 12

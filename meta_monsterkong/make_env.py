@@ -52,7 +52,7 @@ class MetaMonsterKongEnv(PLEEnv):
         else:
             self.observation_space = spaces.Box(0, 255, (64, 64, 3), np.uint8)
         
-        assert self.reset() in self.observation_space, (self.reset(), self.observation_space)
+        #assert self.reset() in self.observation_space, (self.reset(), self.observation_space)
 
     def close(self):
         if self.viewer is not None:
@@ -87,6 +87,34 @@ class MetaMonsterKongEnv(PLEEnv):
     
     def set_level(self, value: int):
         self.game._level = value
+
+    def set_task(self, level=0, color=None):
+        self.game._level = level
+        self.game._color = color
+
+    def reset(self):
+        state = super().reset()
+        if self.game._color is not None:
+            size = (3,3)
+            self.game.kernel = [np.ones(size).flatten() for _ in range(3)]
+            self.game.offset = [128*np.random.random() for _ in range(3)]
+            if self._color == 'RG':
+                self.game.offset[2] = 0.0
+            elif self._color == 'RB':
+                self.game.offset[1] = 0.0
+            elif self._color == 'GB':
+                self.game.offset[0] = 0.0
+            elif self._color == 'R':
+                self.game.offset[1] = 0.0
+                self.game.offset[2] = 0.0
+            elif self._color == 'G':
+                self.game.offset[0] = 0.0
+                self.game.offset[2] = 0.0
+            elif self._color == 'B':
+                self.game.offset[0] = 0.0
+                self.game.offset[1] = 0.0
+
+        return state
 
 
 def make_env(mk_config: Union[MkConfig, Dict] = None, observe_state: bool = False) -> PLEEnv:
